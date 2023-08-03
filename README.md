@@ -7,20 +7,21 @@ Server running [here](https://bookmyclass.fly.dev/)
 # register: 
 https://bookmyclass.fly.dev/api/register
 #
-{
+```{
     "firstname": "Mazi",
     "lastname": "Aleza",
     "email": "test@gmail.com",
     "password": "password",
     "password1": "password"
-}
+}```
 # Login
 https://bookmyclass.fly.dev/api/login
 #
-{
+```{
     "email": "test@gmail.com",
     "password": "password"
 }
+```
 # Profile
 https://bookmyclass.fly.dev/api/profile
 
