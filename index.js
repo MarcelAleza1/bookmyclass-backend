@@ -34,7 +34,7 @@ app.post('/api/register', async (req, res) => {
   // taking a user
   const newUser = new User(req.body);
 
-  if (newUser.password != newUser.password2) {
+  if (newUser.password != newUser.confirmpassword) {
     return res.status(400).json({ message: "password not match" });
   }
 
@@ -89,7 +89,6 @@ app.get('/api/profile', (req, res) => {
   // Check for the token in the Authorization header
 
   const token = req.headers.token;
-  var firstname, lastname, email;
   //console.log(token);
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });

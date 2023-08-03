@@ -25,7 +25,7 @@ const userSchema=mongoose.Schema({
         required: true,
         minlength:8
     },
-    password2:{
+    confirmpassword:{
         type:String,
         required: true,
         minlength:8

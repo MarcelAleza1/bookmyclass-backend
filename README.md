@@ -13,7 +13,7 @@ https://bookmyclass.fly.dev/api/register
     "lastname": "Aleza",
     "email": "test@gmail.com",
     "password": "password",
-    "password1": "password"
+    "confirmpassword": "password"
 }
 ```
 # Login
