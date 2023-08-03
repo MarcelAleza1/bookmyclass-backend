@@ -46,12 +46,14 @@ app.post('/api/register', async (req, res) => {
       return res.status(409).json({ error: 'User already exists' });
     }
 
-    newUser.save();
-    return res.send("Registered successfully")
-
+    const createdUser = newUser.save();
+    if (createdUser) {
+      return res.status(201).json({ message: 'User registered successfully' });
+    }
   } catch (error) {
     console.error('Error checking user existence:', error);
-    res.status(500).json({ error: 'Failed to check user existence' });
+    res.status(500).json({ error: 'Failed to register user' });
+
   }
 });
 
@@ -95,42 +97,44 @@ app.get('/api/profile', (req, res) => {
   }
 
   // Verify the token and extract the userId
-  jwt.verify(token, secretKey, async(err, decoded) => {
+  jwt.verify(token, secretKey, async (err, decoded) => {
     if (err) {
       return res.status(401).json({ error: 'Invalid token' });
     }
     const userId = decoded.userId;
     const user = await User.findOne({ "_id": userId });
     const userProfile = {
-      'firstName':user.firstname,
-      'lastName':user.lastname,
-      'email':user.email
+      'firstName': user.firstname,
+      'lastName': user.lastname,
+      'email': user.email
     }
     res.status(200).json({ userProfile });
   });
 });
 
+app.post('/api/logout', async (req, res) => {
+  const { token } = req.headers.token;
 
-app.get('/api/logout', async (req, res) => {
-  let token = req.headers.token;
-  logoutUser = await User.findOne({ "token": token });
-  return res.send("200");
-  // const user = User.findByToken(req.headers.token)
-  // user.deleteToken(req.token, (err, user) => {
-  //   if (err) return res.status(400).send(err);
-  //   res.sendStatus(200);
-  // });
-  // req.user.deleteToken(req.token, (err, user) => {
-  //   if (err) return res.status(400).send(err);
-  //   res.sendStatus(200);
-  // });
+  try {
+    // Find the user with the active token
+    const user = await User.findOne({ token: token });
 
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    user.token = undefined; // Clear the active token field
+    await user.save();
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    console.error('Error logging out:', error);
+    res.status(500).json({ error: 'Failed to log out' });
+  }
 });
 
 // listening port
 const PORT = process.env.PORT || 5000;
 connectDatabase().then(() => {
   app.listen(PORT, () => {
-     console.log(`app is live at ${PORT}`);
+    console.log(`app is live at ${PORT}`);
   });
 })

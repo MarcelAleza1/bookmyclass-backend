@@ -1,10 +1,8 @@
-const jwt=require('jsonwebtoken');
-const bcrypt=require('bcrypt');
-const salt=10;
-var mongoose=require('mongoose');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-const userSchema=mongoose.Schema({
-    firstname:{
+const userSchema = new mongoose.Schema({
+     firstname:{
         type: String,
         required: true,
         maxlength: 100
@@ -36,66 +34,21 @@ const userSchema=mongoose.Schema({
     }
 });
 
-userSchema.methods.generateToken=(cb)=>{
-    var user =this;
-    var token=jwt.sign(user._id.toHexString(),confiq.SECRET);
+// Hash the password before saving
+userSchema.pre('save', async function (next) {
+  const user = this;
+  if (!user.isModified('password')) return next();
 
-    user.token=token;
-    user.save((err,user)=>{
-        if(err) return cb(err);
-        cb(null,user);
-    })
-}
-userSchema.statics.findByToken =  (token, cb)=> {
-    var user = this;
-  
-    jwt.verify(token, process.env.SECRET, (err, decode) =>{
-      if (err) return cb(err);
-  
-      user.findOne({ "_id": decode, "token": token },  (err, user)=> {
-        if (err) return cb(err);
-        cb(null, user);
-      });
-    });
-  };
-userSchema.methods.deleteToken=(token,cb)=>{
-    var user=this;
-    
-    const logoutUser= user.findOne({ "_id": decode, "token": token });
-    console.log(logoutUser);
-
-    logoutUser.update({$unset : {token :1}},(err,user)=>{
-        if(err) return cb(err);
-        cb(null,user);
-    })
-}
-
-userSchema.pre('save',(next)=>{
-    var user=this;
-    
-    if(user.isModified('password')){
-        bcrypt.genSalt(salt,(err,salt)=>{
-            if(err)return next(err);
-
-            bcrypt.hash(user.password,salt,(err,hash)=>{
-                if(err) return next(err);
-                user.password=hash;
-                user.password2=hash;
-                next();
-            })
-
-        })
-    }
-    else{
-        next();
-    }
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+    next();
+  } catch (error) {
+    return next(error);
+  }
 });
 
-userSchema.methods.comparepassword=(password,cb)=>{
-    bcrypt.compare(password,this.password,(err,isMatch)=>{
-        if(err) return cb(next);
-        cb(null,isMatch);
-    });
-}
+const User = mongoose.model('User', userSchema);
 
-module.exports=mongoose.model('User',userSchema);
+module.exports = User;
