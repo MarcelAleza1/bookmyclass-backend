@@ -2,7 +2,8 @@
 -- node index.js
 
 Server running [here](https://bookmyclass.fly.dev/)
-Api routes
+
+## Api routes
 # register: 
 https://bookmyclass.fly.dev/api/register
 {
