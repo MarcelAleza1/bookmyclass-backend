@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 require('dotenv').config()
 const app = express();
@@ -9,8 +10,13 @@ const app = express();
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use(cookieParser());
+app.use(cors({
+  origin: '*', 
+  methods: ['GET', 'POST','PUT','PATCH','DELETE'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+}));
 const User = require('./models/user');
-const { auth } = require('./middlewares/auth');
+// const { auth } = require('./middlewares/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 secretKey = process.env.SECRET
