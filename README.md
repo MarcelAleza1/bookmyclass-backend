@@ -32,3 +32,13 @@ https://bookmyclass.fly.dev/api/profile
 give header as token
 #
 token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGNiMmM5MDZlOWZlNjI0NDUwZTQxYWMiLCJpYXQiOjE2OTEwNDM3NjcsImV4cCI6MTY5MTA0NzM2N30.hOBDU4f8DeHP1sUkInVFoayf5NrIlGrD3HSsJMf7i0M"
+
+- backend
+  - models
+    - Class.js
+    - User.js
+    - Booking.js
+  - routes
+    - classRoutes.js
+    - bookingRoutes.js
+  - index.js

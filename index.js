@@ -20,6 +20,10 @@ const User = require('./models/user');
 // const { auth } = require('./middlewares/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+// Load routes
+const classRoutes = require('./routes/classRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+
 secretKey = process.env.SECRET
 // database connection
 mongoose.set('strictQuery', false);
@@ -35,8 +39,13 @@ const connectDatabase = async () => {
 }
 
 app.get('/', (req, res) => {
-  res.status(200).send(`Welcome to login , sign-up api`);
+  res.status(200).send(`Welcome BookMyClass api`);
 });
+
+
+// Use routes
+app.use('/api/classes', classRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 app.post('/api/register', async (req, res) => {
   // taking a user
