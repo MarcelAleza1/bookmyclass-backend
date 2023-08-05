@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+//const { validateToken, blacklistToken } = require('./middlewares/validateToken');
 require('dotenv').config()
 const app = express();
 // app use
@@ -11,9 +12,9 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: '*', 
-  methods: ['GET', 'POST','PUT','PATCH','DELETE'], 
-  allowedHeaders: ['Content-Type', 'Authorization'], 
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'token'],
 }));
 const User = require('./models/user');
 // const { auth } = require('./middlewares/auth');
@@ -22,6 +23,7 @@ const jwt = require('jsonwebtoken');
 secretKey = process.env.SECRET
 // database connection
 mongoose.set('strictQuery', false);
+const blacklistToken = [];
 const connectDatabase = async () => {
   try {
     const connection = await mongoose.connect(process.env.DATABASE);
@@ -94,15 +96,15 @@ app.post('/api/login', async (req, res) => {
 
 // get logged in user
 app.get('/api/profile', (req, res) => {
-  // Check for the token in the Authorization header
-
   const token = req.headers.token;
-  //console.log(token);
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });
   }
+   // Check if the token is in the blacklist
+   if (blacklistToken.includes(token)) {
+    return res.status(401).json({ error: 'Token is blacklisted' });
+  }
 
-  // Verify the token and extract the userId
   jwt.verify(token, secretKey, async (err, decoded) => {
     if (err) {
       return res.status(401).json({ error: 'Invalid token' });
@@ -119,22 +121,14 @@ app.get('/api/profile', (req, res) => {
 });
 
 app.post('/api/logout', async (req, res) => {
-  const { token } = req.headers.token;
-
-  try {
-    // Find the user with the active token
-    const user = await User.findOne({ token: token });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    user.token = undefined; // Clear the active token field
-    await user.save();
-    res.status(200).json({ message: 'Logout successful' });
-  } catch (error) {
-    console.error('Error logging out:', error);
-    res.status(500).json({ error: 'Failed to log out' });
+  const token = req.headers.token;
+  if (!token) {
+    return res.status(400).json({ error: 'Token not provided' });
   }
+
+  // Add the token to the blacklist
+  blacklistToken.push(token);
+  return res.status(200).json({ message: 'Logged out successfully' });
 });
 
 // listening port
