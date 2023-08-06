@@ -196,7 +196,7 @@ Contributions to this project are welcome. Feel free to open issues and submit p
 
 This project is licensed under the [MIT License](LICENSE). -->
 
-## Authors
+## Author
 
 - [Mazi Essoloani Aleza](https://github.com/MarcelAleza1)
 
