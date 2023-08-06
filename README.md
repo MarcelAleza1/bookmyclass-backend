@@ -198,5 +198,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Authors
 
-- Your Name - [Mazi Essoloani Aleza](https://github.com/MarcelAleza2)
+- [Mazi Essoloani Aleza](https://github.com/MarcelAleza1)
 
