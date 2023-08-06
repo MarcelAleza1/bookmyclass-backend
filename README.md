@@ -1,7 +1,7 @@
 # Class Booking Information Management System - Backend
 
 This is the backend server for the Class Booking Information Management System. It provides API endpoints to manage classes, users, and bookings for a class booking platform. The backend is built using Node.js, Express.js, and MongoDB as the database.
-
+The base url can be found here: https://bookmyclass.fly.dev/
 ## Table of Contents
 
 - [Getting Started](#getting-started)
