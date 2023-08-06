@@ -54,6 +54,9 @@ app.post('/api/register', async (req, res) => {
   if (newUser.password != newUser.confirmpassword) {
     return res.status(400).json({ message: "password not match" });
   }
+  if (!newUser.firstname || !newUser.lastname || !newUser.email) {
+    return res.status(400).json({ message: "a required field is missing" });
+  }
 
   try {
     // Check if a user with the same email or username already exists
@@ -63,9 +66,15 @@ app.post('/api/register', async (req, res) => {
       return res.status(409).json({ error: 'User already exists' });
     }
 
-    const createdUser = newUser.save();
+    const createdUser = await newUser.save();
     if (createdUser) {
-      return res.status(201).json({ message: 'User registered successfully' });
+      const newUserDetails = {
+        // "_id": userId, 
+        'firstName': createdUser.firstname,
+        'lastName': createdUser.lastname,
+        'email': createdUser.email
+      }
+      return res.status(201).json({ message: 'User registered successfully', newUserDetails });
     }
   } catch (error) {
     console.error('Error checking user existence:', error);
@@ -109,8 +118,8 @@ app.get('/api/profile', (req, res) => {
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });
   }
-   // Check if the token is in the blacklist
-   if (blacklistToken.includes(token)) {
+  // Check if the token is in the blacklist
+  if (blacklistToken.includes(token)) {
     return res.status(401).json({ error: 'Token is blacklisted' });
   }
 
@@ -121,7 +130,7 @@ app.get('/api/profile', (req, res) => {
     const userId = decoded.userId;
     const user = await User.findOne({ "_id": userId });
     const userProfile = {
-      "_id": userId, 
+      "_id": userId,
       'firstName': user.firstname,
       'lastName': user.lastname,
       'email': user.email
