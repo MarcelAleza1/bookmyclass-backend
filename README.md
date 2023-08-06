@@ -47,7 +47,7 @@ Copy the `.env.example` file and rename it to `.env`. Replace the placeholder va
 4. Start the server:
 
 ```bash
-npm start
+node index.js
 ```
 
 The server will start running at http://localhost:8080.
