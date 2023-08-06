@@ -121,6 +121,7 @@ app.get('/api/profile', (req, res) => {
     const userId = decoded.userId;
     const user = await User.findOne({ "_id": userId });
     const userProfile = {
+      "_id": userId, 
       'firstName': user.firstname,
       'lastName': user.lastname,
       'email': user.email
