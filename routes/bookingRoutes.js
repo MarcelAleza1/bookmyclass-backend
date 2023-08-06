@@ -9,7 +9,11 @@ router.get('/', async (req, res) => {
     const bookings = await Booking.find().populate({
       path: 'user',
       select: '_id firstname lastname email',
-    });
+    }).populate({
+      path: 'class', 
+      select: 'name schedule instructor availableSeats', 
+    })
+    ;
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch bookings' });
