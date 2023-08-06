@@ -12,7 +12,7 @@ This is the backend server for the Class Booking Information Management System. 
 - [Database](#database)
 - [Environment Variables](#environment-variables)
 - [Contributing](#contributing)
-- [License](#license)
+<!-- - [License](#license) -->
 
 ## Getting Started
 
@@ -192,9 +192,9 @@ The server will validate the token using the secret key specified in the .env fi
 
 Contributions to this project are welcome. Feel free to open issues and submit pull requests.
 
-## License
+<!-- ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE). -->
 
 ## Authors
 
