@@ -158,7 +158,7 @@ POST /api/login
 Content-Type: application/json
 
 {
-  "email": "johndoe@gmail.com",
+  "email": "test@gmail.com",
   "password": "password123"
 }
 ```
