@@ -181,7 +181,7 @@ The server will validate the token using the secret key specified in the .env fi
 
 Here's an example using cURL:
 ```bash
-curl -X GET http://localhost:8080/api/profile -H "Authorization: Bearer <YOUR_TOKEN>"
+curl -X GET http://localhost:8080/api/profile -H "token: <YOUR_TOKEN>"
 ```
 
 Replace <YOUR_TOKEN> with the actual token received after successful login.

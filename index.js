@@ -30,7 +30,7 @@ mongoose.set('strictQuery', false);
 const blacklistToken = [];
 const connectDatabase = async () => {
   try {
-    const connection = await mongoose.connect(process.env.DATABASE);
+    const connection = await mongoose.connect(process.env.MONGODB_URI);
     console.log(`MongoDb connected: ${connection.connection.host}`);
   }
   catch (error) {
@@ -39,7 +39,7 @@ const connectDatabase = async () => {
 }
 
 app.get('/', (req, res) => {
-  res.status(200).send(`Welcome BookMyClass api`);
+  res.status(200).send(`Welcome to BookMyClass api`);
 });
 
 
